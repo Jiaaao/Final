@@ -1,4 +1,4 @@
-class GenerateCustomer extends bpM{
+class GenerateCustomer  extends bpM{
 
   int generateCtr = 0;
   public Customer GenerateCustomer(int removectr, int newGen)
@@ -13,9 +13,9 @@ class GenerateCustomer extends bpM{
     {
       Customer customerArray = new Customer();
       int rand = (int) (Math.random()*4);
-      int rand2 = (int) (Math.random()*4);
+      //int rand2 = (int) (Math.random()*4);
       customerArray.setCustomerTask1(Task[rand]);
-      customerArray.setCustomerTask2(Task[rand2]);
+      //customerArray.setCustomerTask2(Task[rand2]);
       customerAl.add(customerArray);
 
 
@@ -23,7 +23,7 @@ class GenerateCustomer extends bpM{
       customerGetArray = customerAl.get(generateCtr);
 
       //Display
-      System.out.println("\nCustomer " + ( generateCtr + 1 ) + " Task 1: " + customerGetArray.getCustomerTask1() + " Task 2: " + customerGetArray.getCustomerTask2());
+      System.out.println("\nCustomer " + ( generateCtr + 1 ) + " Task 1: " + customerGetArray.getCustomerTask1() /*+ " Task 2: " + customerGetArray.getCustomerTask2() */ );
 
 
       generateCtr++;

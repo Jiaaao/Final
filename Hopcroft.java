@@ -176,7 +176,10 @@ public class Hopcroft extends global
 
         }
 
+      /* --------- Displays number of matches of the current batch ---------*/
+      System.out.println("No. of Matches: " + matching);
 
+      /*--------------- Reset for New Batch  -----------------*/
       Arrays.fill(adjList, null);
       Arrays.fill(match, null);
       i = 0;

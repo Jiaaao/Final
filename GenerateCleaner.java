@@ -12,7 +12,10 @@ public class GenerateCleaner extends bpM{
     {
       Cleaner cleanerArray = new Cleaner();
 
-      cleanerArray.setCleanerTask(Task[(int) (Math.random()*4)]);                    //Set Random Task between 1 - 4 from the Aray
+      int rand = (int) (Math.random()*4);
+      int rand2 = (int) (Math.random()*4);
+      cleanerArray.setCleanerTask1(Task[rand]);                    //Set Random Task between 1 - 4 from the Aray
+      cleanerArray.setCleanerTask2(Task[rand2]);
       cleanerAl.add(cleanerArray);
 
 
@@ -20,7 +23,7 @@ public class GenerateCleaner extends bpM{
       cleanerGetArray = cleanerAl.get(generateCtr);
 
       //Display
-      System.out.println("\nCleaner " + ( generateCtr + 1 ) + " Task 1: " + cleanerGetArray.getCleanerTask());
+      System.out.println("\nCleaner " + ( generateCtr + 1 ) + " Task 1: " + cleanerGetArray.getCleanerTask1() + " Task 2 : " + cleanerGetArray.getCleanerTask2() );
 
 
       generateCtr++;

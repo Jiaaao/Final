@@ -17,4 +17,7 @@ public class global{
   public static Cleaner cleanerGetArray = new Cleaner();
   public static Customer customerGetArray = new Customer();
 
+  public static ArrayList<Customer> removeCustomer = new ArrayList<>();
+  public static ArrayList<Cleaner> removeCleaner = new ArrayList<>();
+
 }
