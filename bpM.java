@@ -59,7 +59,7 @@ public class bpM extends global{
 
         /* ------------------- Hopcroft Karp Algorithm ------------------- */
         ArrayList<ArrayList<Integer>> arr = hck.HopcroftKarp(L, R);
-        System.out.println("Matched Customers and Cleaners: " + arr);    //prints matched vertices
+        System.out.println("Matches: " + arr);    //prints matched vertices
 
 
 
