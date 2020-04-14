@@ -35,14 +35,15 @@ public class bpM  {
         long startTime = System.currentTimeMillis();
         batchCounter++;
 
-        /* ------ Initial Generation ------ */
-        if ( batchCounter == 1 )
-          {
-            global.L = (int) (Math.random()*global.control + 1);
-            global.R = (int) (Math.random()*global.control + 1);
-            GenerateCustomer.GenerateCustomer(global.L);
-            GenerateCleaner.GenerateCleaner(global.R);
-          }
+        /* ------ Generate Customers and Cleaners ------ */
+        int genRandCust = (int) (Math.random()*global.control + 1);
+        int genRandCle = (int) (Math.random()*global.control + 1);
+        global.L = global.L + genRandCust;
+        global.R = global.R + genRandCle;
+        System.out.println("\n\nRandom Generated Customers: " + genRandCust);
+        System.out.println("Random Generated Cleaners: " + genRandCle);
+        GenerateCustomer.GenerateCustomer(genRandCust);
+        GenerateCleaner.GenerateCleaner(genRandCle);
 
         global.V = global.L + global.R;
         hck.GraphV(global.V);
@@ -84,7 +85,13 @@ public class bpM  {
 
         /* ------------------- Hopcroft Karp Algorithm ------------------- */
         ArrayList<ArrayList<Integer>> Matched = hck.HopcroftKarp(global.L, global.R);
-        System.out.println("Matches: " + Matched);    //prints matched vertices
+        System.out.println("\nMatches");
+
+        if ( Matched.size() > 0 )
+          for (int u = 0; u < Matched.size() ;u++ )
+          {
+            System.out.println(Matched.get(u).get(0) + " -- " + Matched.get(u).get(1) );
+          }
 
 
 
@@ -121,6 +128,7 @@ public class bpM  {
 
 
         /* ------ There is a matching which matches all vertices of the graph ------ */
+        System.out.println();
         if(global.L == 0 && global.R == 0)
           System.out.println("Perfect Match: Yes");
         else
@@ -130,22 +138,6 @@ public class bpM  {
         System.out.println("\n\nNo. of Removed Customers: " +removeCleanerctr);
         System.out.println("No. of Removed Cleaners: " +removeCleanerctr);
 
-
-        /* ------ Generate random number of customers and cleaners for new batch ------ */
-        int genRandCust = (int) (Math.random()*global.control + 1);
-        int genRandCle = (int) (Math.random()*global.control + 1);
-        global.L = global.L + genRandCust;
-        global.R = global.R + genRandCle;
-        System.out.println("\n\nRandom Generated Customers: " + genRandCust);
-        System.out.println("Random Generated Cleaners: " + genRandCle);
-        GenerateCustomer.GenerateCustomer(genRandCust);
-        GenerateCleaner.GenerateCleaner(genRandCle);
-
-
-
-        /* ------ Displays the new current number of customers and cleaners ------ */
-        System.out.println("\n\nNew Number of Customers: " + global.L);
-        System.out.println("New Number of Cleaners: " + global.R);
 
         /* ------ Execution Time  ------ */
         long endTime = System.currentTimeMillis();
