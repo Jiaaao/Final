@@ -1,31 +1,16 @@
-class GenerateCustomer  extends bpM{
+  class GenerateCustomer  {
 
-  int generateCtr = 0;
-  public Customer GenerateCustomer(int removectr, int newGen)
+  public void GenerateCustomer(int newGen)
   {
+    global global = new global();
 
-    String[] Task = { "Washing", "Furniture", "Pool", "Car" };
-
-    generateCtr = generateCtr - removectr;
-    newGen = newGen + generateCtr;
-
-    while( generateCtr < newGen )
+    for (int i = 0; i < newGen; i++)
     {
-      Customer customerArray = new Customer();
-      int rand = (int) (Math.random()*4);
-      customerArray.setCustomerTask1(Task[rand]);
-      customerAl.add(customerArray);
-
-
-      Customer customerGetArray = new Customer();
-      customerGetArray = customerAl.get(generateCtr);
-
-      //Display
-      System.out.println("\nCustomer " + ( generateCtr + 1 ) + " Task : " + customerGetArray.getCustomerTask1()  );
-
-
-      generateCtr++;
+      Customer customerobj = new Customer();
+      customerobj.setCustomerTask1(global.Task[(int) (Math.random()*global.Task.length)]);
+      global.customerAl.add(customerobj);
     }
-    return customerGetArray;
+
   }
+
 }

@@ -3,63 +3,89 @@ import java.util.*;
 
 
 
-public class bpM extends global{
+public class bpM  {
 
 
+  /* ------------------ BYTE TO MEGABYTE CONVERSION ---------------- */
+  private static final long MEGABYTE = 1024L * 1024L;
+  public static long bytesToMegabytes(long bytes) {
+      return bytes / MEGABYTE;
+  }
 
   /* ------------------ MAIN CLASS ---------------- */
   public static void main(String[] args){
 
 
-    GenerateCleaner GenerateCleaner = new GenerateCleaner();
-    GenerateCustomer GenerateCustomer = new GenerateCustomer();
-    Hopcroft hck = new Hopcroft();
 
     Scanner input = new Scanner(System.in);
     char choice;
 
+    GenerateCleaner GenerateCleaner = new GenerateCleaner();
+    GenerateCustomer GenerateCustomer = new GenerateCustomer();
+    Hopcroft hck = new Hopcroft();
+    global global = new global();
+
+
+
+
+
+
 
     /* ------ Initial Generation ------ */
-    System.out.println("\n\n------ CUSTOMERS ------");
-    GenerateCustomer.GenerateCustomer(0, L);
+    GenerateCustomer.GenerateCustomer(global.L);
+    GenerateCleaner.GenerateCleaner(global.R);
 
-    System.out.println("\n\n------ CLEANERS ------");
-    GenerateCleaner.GenerateCleaner(0, R);
 
 
     int batchCounter = 0;
-
+    long elapsedTotal = 0;
 
     /*------ ONLINE ------*/
     do
     {
         long startTime = System.currentTimeMillis();
-        int V = L + R;
-        hck.GraphV(V);
-        int E = 0;
+        global.V = global.L + global.R;
+        hck.GraphV(global.V);
+        global.E = 0;
+
+        /* ------ Display Customers ------ */
+        System.out.println("\n\n------ CUSTOMERS ------");
+        for(int displayCtr = 0; displayCtr < global.L; displayCtr++)
+        {
+          System.out.println("\nCustomer " + ( displayCtr + 1 ) + " Task : " + global.customerAl.get(displayCtr).getCustomerTask1()  );
+        }
+        System.out.println("------------------------");
+
+        /* ------ Display Cleaners ------ */
+        System.out.println("\n\n------ CLEANERS ------");
+        for(int displayCtr = 0; displayCtr < global.R; displayCtr++)
+        {
+          System.out.println("\nCleaner " + ( displayCtr + 1 ) + " Task 1: " + global.cleanerAl.get(displayCtr).getCleanerTask1() + " Task 2 : " + global.cleanerAl.get(displayCtr).getCleanerTask2() );
+        }
+        System.out.println("------------------------");
 
         //While there is L/Customer
-        for( int n = 0; n < L; n++ )
+        for( int n = 0; n < global.L; n++ )
         {
               //While there is a R/Cleaner
-              for(int m = 0; m < R; m++)
+              for(int m = 0; m < global.R; m++)
               {
                 //Finding a match for Customer with a cleaner
-                if ( customerAl.get(n).getCustomerTask1() == cleanerAl.get(m).getCleanerTask1() || customerAl.get(n).getCustomerTask1() == cleanerAl.get(m).getCleanerTask2()  )
+                if ( global.customerAl.get(n).getCustomerTask1() == global.cleanerAl.get(m).getCleanerTask1() || global.customerAl.get(n).getCustomerTask1() == global.cleanerAl.get(m).getCleanerTask2()  )
                 {
                   hck.addEdge(n, m);
-                  E = E + 1;
+                  global.E = global.E + 1;
                 }
               }
         }
         batchCounter++;
         System.out.println("\n\n------------ Batch " + batchCounter + " -----------------------------");
-        hck.GraphE(E);
+        hck.GraphE(global.E);
         hck.display();  //DISPLAY Adjacency List
 
         /* ------------------- Hopcroft Karp Algorithm ------------------- */
-        ArrayList<ArrayList<Integer>> arr = hck.HopcroftKarp(L, R);
-        System.out.println("Matches: " + arr);    //prints matched vertices
+        ArrayList<ArrayList<Integer>> Matched = hck.HopcroftKarp(global.L, global.R);
+        System.out.println("Matches: " + Matched);    //prints matched vertices
 
 
 
@@ -67,19 +93,19 @@ public class bpM extends global{
         int removeCustomerctr = 0;
         int removeCleanerctr = 0;
 
-        if ( arr.size() > 0 )
-          for (int u = 0; u < arr.size() ;u++ )
+        if ( Matched.size() > 0 )
+          for (int u = 0; u < Matched.size() ;u++ )
           {
-            for(int l = 0; l < L; l++)
-              if ( customerAl.get(arr.get(u).get(0) - 1).equals(customerAl.get(l)) )
+            for(int l = 0; l < global.L; l++)
+              if ( global.customerAl.get(Matched.get(u).get(0) - 1).equals(global.customerAl.get(l)) )
                 {
-                  removeCustomer.add(customerAl.get(l));
+                  global.removeCustomer.add(global.customerAl.get(l));
                   removeCustomerctr++;
                 }
-            for(int k = 0; k < R; k++)
-              if ( cleanerAl.get(arr.get(u).get(1) - 1).equals(cleanerAl.get(k)) )
+            for(int k = 0; k < global.R; k++)
+              if ( global.cleanerAl.get(Matched.get(u).get(1) - 1).equals(global.cleanerAl.get(k)) )
                 {
-                  removeCleaner.add(cleanerAl.get(k));
+                  global.removeCleaner.add(global.cleanerAl.get(k));
                   removeCleanerctr++;
                 }
           }
@@ -89,14 +115,14 @@ public class bpM extends global{
 
 
         /* ------ Remove Matched Customers and Cleaners ------ */
-        customerAl.removeAll((removeCustomer));
-        cleanerAl.removeAll((removeCleaner));
-        L = L - removeCustomerctr;
-        R = R - removeCleanerctr;
+        global.customerAl.removeAll((global.removeCustomer));
+        global.cleanerAl.removeAll((global.removeCleaner));
+        global.L = global.L - removeCustomerctr;
+        global.R = global.R - removeCleanerctr;
 
 
         /* ------ There is a matching which matches all vertices of the graph ------ */
-        if(L == 0 && R == 0)
+        if(global.L == 0 && global.R == 0)
           System.out.println("Perfect Match: Yes");
         else
           System.out.println("Perfect Match: No");
@@ -107,45 +133,31 @@ public class bpM extends global{
 
 
         /* ------ Generate random number of customers and cleaners for new batch ------ */
-        int genRandCust = (int) (Math.random()*control + 1);
-        int genRandCle = (int) (Math.random()*control + 1);
-        L = L + genRandCust;
-        R = R + genRandCle;
+        int genRandCust = (int) (Math.random()*global.control + 1);
+        int genRandCle = (int) (Math.random()*global.control + 1);
+        global.L = global.L + genRandCust;
+        global.R = global.R + genRandCle;
         System.out.println("\n\nRandom Generated Customers: " + genRandCust);
         System.out.println("Random Generated Cleaners: " + genRandCle);
-
-
-
-        /* ------ Customers ------ */
-        System.out.println("\n\n------ CUSTOMERS ------");
-        GenerateCustomer.GenerateCustomer(removeCustomerctr, genRandCust);
-        System.out.println("------------------------");
-
-
-
-        /* ------ Cleaners ------ */
-        System.out.println("\n\n------ CLEANERS ------");
-        GenerateCleaner.GenerateCleaner(removeCleanerctr, genRandCle);
-        System.out.println("------------------------");
+        GenerateCustomer.GenerateCustomer(genRandCust);
+        GenerateCleaner.GenerateCleaner(genRandCle);
 
 
 
         /* ------ Displays the new current number of customers and cleaners ------ */
-        System.out.println("\n\nNew Number of Customers: " + L);
-        System.out.println("New Number of Cleaners: " + R);
+        System.out.println("\n\nNew Number of Customers: " + global.L);
+        System.out.println("New Number of Cleaners: " + global.R);
 
-
-        /* ------ Execution Time per Batch ------ */
+        /* ------ Execution Time  ------ */
         long endTime = System.currentTimeMillis();
         long timeElapsed = endTime - startTime;
+        elapsedTotal = timeElapsed + elapsedTotal;
         System.out.println("\nExecution Time in milliseconds: " + timeElapsed);
         System.out.println("--------------------------------------------------");
 
-
-
-        arr.clear();
-        /* ------ 10 Batches per 'Continue' ------ */
-        if( batchCounter % batches == 0)
+        Matched.clear();
+        /* ------ No. of Batches per 'Continue' ------ */
+        if( batchCounter % global.batches == 0)
           {
             System.out.println("\n\nContinue? Y or N");
             choice = input.next().charAt(0);
@@ -160,6 +172,22 @@ public class bpM extends global{
               }
           }
     }while( 1 > 0 ); //END OF WHILE LOOP
+
+
+    //System.out.println("Used memory is megabytes: " + bytesToMegabytes(memory));
+
+    /* ------ Memory Consumption ------ */
+    Runtime runtime = Runtime.getRuntime();
+    runtime.gc();
+    long memory = runtime.totalMemory() - runtime.freeMemory();
+    System.out.println("Used memory is bytes: " + memory);
+    System.out.println("Used memory is megabytes: "+ bytesToMegabytes(memory));
+
+    /* ------ Average Execution Time ------ */
+    long average = elapsedTotal / batchCounter;
+    System.out.println("\nAverage Execution Time in milliseconds: " + average);
+    System.out.println("--------------------------------------------------");
+
 
   }
 }

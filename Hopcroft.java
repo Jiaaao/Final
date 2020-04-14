@@ -1,7 +1,9 @@
 import java.util.*;
 
-public class Hopcroft extends global
+public class Hopcroft
 {
+
+    global global = new global();
 
     private final int NIL = 0;
     private final int INF = Integer.MAX_VALUE;
@@ -9,21 +11,21 @@ public class Hopcroft extends global
     private int[] PairV;
     private int[] Dist;
     ArrayList<Integer> adjList[];       //Adjacency Array of ArrayList for Edges
-    ArrayList<Integer> match[];     //Index for matchList
+    ArrayList<Integer> match[];         //Store the matched vertices into the arraylist per match[] index
     int i = 0;
 
     public void GraphV(int V)
     {
-      this.V = V;                       //VERTICES
+      global.V = V;                       //VERTICES
       adjList = new ArrayList[V + 1];
-      for(int i = 0; i < adjList.length; i++)
-        adjList[i] = new ArrayList<>();
+      for(int k = 0; k < adjList.length; k++)
+        adjList[k] = new ArrayList<>();
 
     }
 
     public void GraphE(int E)
     {
-      this.E = E;
+      global.E = E;
       match = new ArrayList[E];
       for(int j = 0; j < match.length; j++)
         match[j] = new ArrayList<>();
@@ -35,7 +37,7 @@ public class Hopcroft extends global
     {
       Queue<Integer> queue = new LinkedList<Integer>();
 
-      for(int u = 1; u <= L; u++)
+      for(int u = 1; u <= global.L; u++)
       {
 
         if (PairU[u] == NIL)
@@ -91,7 +93,7 @@ public class Hopcroft extends global
               PairU[u] = v;
               match[i].add(PairV[v]);
               match[i].add(PairU[u]);
-              matchList.add(match[i]);
+              global.matchList.add(match[i]);
               i++;
               return true;
             }
@@ -109,11 +111,11 @@ public class Hopcroft extends global
     /*------ Display Adjacency List ------*/
     void display()
     {
-      for(int i = 0; i < V; i++)
+      for(int i = 0; i < global.V; i++)
       {
         if ( adjList[i].size() > 0 )
         {
-          System.out.println("Vertex " +i+ " is connected to:- ");
+          System.out.println("Customer " +i+ " has a match with Cleaner(s):- ");
           for(int j = 0; j < adjList[i].size(); j++)
             System.out.print(adjList[i].get(j) + " ");
         }
@@ -123,16 +125,16 @@ public class Hopcroft extends global
     }//display END BRACKET
 
     /*------ Add Edges to Adjacency List ------*/
-    void addEdge(int i, int j)
+    void addEdge(int u, int v)
     {
-      adjList[i+1].add(j+1);
+      adjList[u+1].add(v+1);
     }//addEdge END BRACKET
 
 
     /*------ Hopcroft Karp ------*/
     public ArrayList HopcroftKarp(int L, int R) //Hopcroft Karp Algorithm
     {
-      matchList.clear();
+      global.matchList.clear();
       System.out.println("No. of Customers: " + L);
       System.out.println("No. of Cleaners: " + R);
 
@@ -163,13 +165,13 @@ public class Hopcroft extends global
 
       /*------ Remove previous matching if there exists a new matching
               of the same vertex of Customer ------*/
-      for(int c = 0; c < matchList.size(); c++)
+      for(int c = 0; c < global.matchList.size(); c++)
         {
         for(int z = 0; z < c; z++)
           {
-            if ( matchList.get(c).get(0) == matchList.get(z).get(0) )
+            if ( global.matchList.get(c).get(0) == global.matchList.get(z).get(0) )
               {
-                matchList.remove(matchList.get(z));
+                global.matchList.remove(global.matchList.get(z));
                 c = c - 1;
               }
           }
@@ -183,7 +185,7 @@ public class Hopcroft extends global
       Arrays.fill(adjList, null);
       Arrays.fill(match, null);
       i = 0;
-      return matchList;
+      return global.matchList;
     }//END BRACKET HopcroftKarp
 
 
