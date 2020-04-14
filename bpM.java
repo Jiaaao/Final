@@ -26,17 +26,6 @@ public class bpM  {
     global global = new global();
 
 
-
-
-
-
-
-    /* ------ Initial Generation ------ */
-    GenerateCustomer.GenerateCustomer(global.L);
-    GenerateCleaner.GenerateCleaner(global.R);
-
-
-
     int batchCounter = 0;
     long elapsedTotal = 0;
 
@@ -44,6 +33,17 @@ public class bpM  {
     do
     {
         long startTime = System.currentTimeMillis();
+        batchCounter++;
+
+        /* ------ Initial Generation ------ */
+        if ( batchCounter == 1 )
+          {
+            global.L = (int) (Math.random()*global.control + 1);
+            global.R = (int) (Math.random()*global.control + 1);
+            GenerateCustomer.GenerateCustomer(global.L);
+            GenerateCleaner.GenerateCleaner(global.R);
+          }
+
         global.V = global.L + global.R;
         hck.GraphV(global.V);
         global.E = 0;
@@ -78,7 +78,6 @@ public class bpM  {
                 }
               }
         }
-        batchCounter++;
         System.out.println("\n\n------------ Batch " + batchCounter + " -----------------------------");
         hck.GraphE(global.E);
         hck.display();  //DISPLAY Adjacency List
@@ -174,14 +173,12 @@ public class bpM  {
     }while( 1 > 0 ); //END OF WHILE LOOP
 
 
-    //System.out.println("Used memory is megabytes: " + bytesToMegabytes(memory));
-
     /* ------ Memory Consumption ------ */
     Runtime runtime = Runtime.getRuntime();
     runtime.gc();
     long memory = runtime.totalMemory() - runtime.freeMemory();
-    System.out.println("Used memory is bytes: " + memory);
-    System.out.println("Used memory is megabytes: "+ bytesToMegabytes(memory));
+    System.out.println("\nUsed memory: " + memory + " bytes");
+    System.out.println("Used memory: "+ bytesToMegabytes(memory) + " megabytes");
 
     /* ------ Average Execution Time ------ */
     long average = elapsedTotal / batchCounter;

@@ -7,8 +7,8 @@ public class global{
   ArrayList<ArrayList<Integer>> matchList = new ArrayList<ArrayList<Integer>>();  //Store the matched vertices in match[] array of arraylist into another arraylist //ArrayList of ArrayList
   public static String[] Task = { "Laundry", "Living Room", "Pool", "Car" };
 
-  public static  int L = 5;             //Initial Customer
-  public static  int R = 5;             //Initial Cleaner
+  public static  int L;                  //Customer
+  public static  int R;                 //Cleaner
   public static  int control = 5;       //A Number equal to or less that generates Customers and Cleaners
   public static  int batches = 5;       //A number of batch per 'Continue'
 
